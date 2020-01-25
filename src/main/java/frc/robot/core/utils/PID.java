@@ -61,9 +61,6 @@ public class PID {
 
         //Sets prevTime to the current time for the next call of update()
         prevTime = System.currentTimeMillis();
-
-        //Same as above with error
-        prevError = error;
         
         //Updating the error
         error = target - input;
@@ -73,6 +70,9 @@ public class PID {
         
         //Finding the rate at which the error is changing (derivative of error)
         errorRate = (error - prevError) / period;
+
+        //Same as above with error
+        prevError = error;
     }
 
      public double calculate() {
