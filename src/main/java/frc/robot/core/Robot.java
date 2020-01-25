@@ -7,6 +7,10 @@
 
 package frc.robot.core;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +25,9 @@ import frc.robot.core.components.Drivetrain;
  * project.
  */
 public class Robot extends TimedRobot {
+  
+  private static CANSparkMax frontLeft, frontRight, backLeft, backRight;
+
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
@@ -36,6 +43,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+    frontLeft = new CANSparkMax(0, MotorType.kBrushless);
+    frontRight = new CANSparkMax(1, MotorType.kBrushless);
+    backLeft = new CANSparkMax(2, MotorType.kBrushless);
+    backRight = new CANSparkMax(3, MotorType.kBrushless);
+
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -43,7 +56,7 @@ public class Robot extends TimedRobot {
     controlSystem = new ControlSystem();
     controlSystem.robotInit();
 
-    drivetrain = new Drivetrain();
+    drivetrain = new Drivetrain(new SpeedControllerGroup(frontLeft, backLeft), new SpeedControllerGroup(frontRight, backRight));
     drivetrain.robotInit();
   
   }
@@ -58,7 +71,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    Drivetrain drivetrain = new Drivetrain();
     drivetrain.teleopPeriodic();
   }
 

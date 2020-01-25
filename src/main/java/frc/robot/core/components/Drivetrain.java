@@ -21,32 +21,21 @@ public class Drivetrain implements Component, PIDOutput {
 
     DifferentialDrive differentialDrive;
 
-    CANSparkMax frontLeft;
-    CANSparkMax frontRight;
-    CANSparkMax backLeft;
-    CANSparkMax backRight;
+    private SpeedControllerGroup left;
+    private SpeedControllerGroup right;
 
     private AHRS navx;
     private PIDController turnController;
     private double rotateToAngleRate;
     private boolean rotateToAngle;
 
-    public Drivetrain(){}
+    public Drivetrain(SpeedControllerGroup left, SpeedControllerGroup right) {
+        this.left = left;
+        this.right = right;
+    }
 
     @Override
     public void robotInit() {
-
-        SpeedControllerGroup right;
-        SpeedControllerGroup left;
-
-        frontLeft = new CANSparkMax(0, MotorType.kBrushless);
-        frontRight = new CANSparkMax(1, MotorType.kBrushless);
-        backLeft = new CANSparkMax(2, MotorType.kBrushless);
-        backRight = new CANSparkMax(3, MotorType.kBrushless);
-
-        left = new SpeedControllerGroup(frontLeft, backLeft);
-        right = new SpeedControllerGroup(frontRight, backRight);
-
         differentialDrive = new DifferentialDrive(left, right);
 
         try {
